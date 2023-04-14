@@ -1,3 +1,12 @@
+# Used solidity contracts
+* https://github.com/amanusk/hardhat-template
+* https://github.com/PaulRBerg/hardhat-template
+* https://github.com/smartcontractkit/hardhat-starter-kit
+* 
+* https://github.com/PatrickAlphaC/hardhat-dao-fcc
+* https://github.com/PatrickAlphaC/dao-template
+* https://github.com/PatrickAlphaC/hardhat-simple-storage-fcc
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
