@@ -8,7 +8,7 @@ import snapshotGasCost from "@uniswap/snapshot-gas-cost";
 describe("Token", () => {
   async function deployContracts() {
     const [deployer, sender, receiver] = await ethers.getSigners();
-    const tokenFactory = await ethers.getContractFactory("TestToken");
+    const tokenFactory = await ethers.getContractFactory("CommunaToken");
     const tokenContract = await tokenFactory.deploy();
 
     expect(await tokenContract.totalSupply()).to.eq(0);

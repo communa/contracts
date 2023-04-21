@@ -14,7 +14,7 @@ describe("SimpleStorage", function () {
     const expectedValue = "0";
     // assert
     // expect
-    assert.equal(currentValue.toString(), expectedValue)
+    assert.equal(currentValue.toString(), expectedValue);
     // expect(currentValue.toString()).to.equal(expectedValue)
   });
 
@@ -43,7 +43,7 @@ describe("SimpleStorage", function () {
     const expectedFavoriteNumber = "16";
     const transactionResponse = await simpleStorage.addPerson(
       expectedPersonName,
-      expectedFavoriteNumber,
+      expectedFavoriteNumber
     );
     await transactionResponse.wait(1);
     const { favoriteNumber, name } = await simpleStorage.people(0);
