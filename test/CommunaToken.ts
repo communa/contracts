@@ -15,6 +15,7 @@ describe("Token", () => {
 
     return { deployer, sender, receiver, tokenContract };
   }
+
   describe("Mint", async () => {
     it("Should mint some tokens", async () => {
       const { deployer, sender, receiver, tokenContract } = await loadFixture(
