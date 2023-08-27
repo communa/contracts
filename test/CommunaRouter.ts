@@ -10,13 +10,15 @@ describe("Router", function () {
     await token.deployed();
 
     const Router = await ethers.getContractFactory("CommunaRouter");
-    const router = await Router.deploy(addr3.address, token.address);
+    const router = await Router.deploy(addr3.address);
     await router.deployed();
 
     token.mint(addr1.address, 100);
 
     await token.approve(router.address, 100, { from: addr1.address });
-    await router.pay(addr2.address, 100, { from: addr1.address });
+    await router.pay(addr2.address, token.address, 100, {
+      from: addr1.address,
+    });
 
     const totalAddr1 = await token.balanceOf(addr1.address);
     const totalAddr2 = await token.balanceOf(addr2.address);

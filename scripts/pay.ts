@@ -5,7 +5,7 @@
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
 
-const contract = require("../artifacts/contracts/Greeter.sol/Greeter.json");
+const contract = require("../artifacts/contracts/CommunaRouter.sol/CommunaRouter.json");
 
 const INFURA_API_KEY = process.env.INFURA_API_KEY as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
@@ -19,9 +19,12 @@ async function main() {
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
   const c = new ethers.Contract(CONTRACT_ADDRESS, contract.abi, signer);
 
-  await c.setGreeting("aaaa");
-  const message = await c.greet();
-  console.log(message);
+  // https://polygonscan.com/token/0xc2132d05d31c914a87c6611c10748aeb04b58e8f
+  const token = "0xc2132d05d31c914a87c6611c10748aeb04b58e8f";
+  const freelancer = "0xc8e8089B28170CC447E89e9DaB898Bf0Cd6f53d8";
+  const amount = 100;
+
+  await c.pay(token, freelancer, amount);
 }
 
 main().catch((error) => {
