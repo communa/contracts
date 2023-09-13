@@ -24,10 +24,6 @@ describe("Router", function () {
     const totalAddr2 = await token.balanceOf(addr2.address);
     const totalAddr3 = await token.balanceOf(addr3.address);
 
-    // console.log(addr1.address, totalAddr1);
-    // console.log(addr2.address, totalAddr2);
-    // console.log(addr3.address, totalAddr3);
-
     expect(totalAddr1).to.eq("0");
     expect(totalAddr2).to.eq("95");
     expect(totalAddr3).to.eq("5");

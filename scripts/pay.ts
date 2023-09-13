@@ -1,30 +1,42 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
 
-const contract = require("../artifacts/contracts/CommunaRouter.sol/CommunaRouter.json");
+const contractRouterAbi = require("../artifacts/contracts/CommunaRouter.sol/CommunaRouter.json");
+const contractTokenAbi = require("../artifacts/contracts/CommunaToken.sol/CommunaToken.json");
 
-const INFURA_API_KEY = process.env.INFURA_API_KEY as string;
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS as string;
+
+const ROUTER_ADDRESS = process.env.ROUTER_ADDRESS as string;
+const FREELANCER_ADDRESS = process.env.FREELANCER_ADDRESS as string;
+const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS as string;
 
 async function main() {
-  const provider = new ethers.providers.InfuraProvider(
+  const provider = new ethers.providers.AlchemyProvider(
     "goerli",
-    INFURA_API_KEY
+    ALCHEMY_API_KEY
   );
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-  const c = new ethers.Contract(CONTRACT_ADDRESS, contract.abi, signer);
+  const token = new ethers.Contract(
+    TOKEN_ADDRESS,
+    contractTokenAbi.abi,
+    signer
+  );
+  const router = new ethers.Contract(
+    ROUTER_ADDRESS,
+    contractRouterAbi.abi,
+    signer
+  );
+  const amount = ethers.utils.parseEther("1");
 
-  // https://polygonscan.com/token/0xc2132d05d31c914a87c6611c10748aeb04b58e8f
-  const token = "0xc2132d05d31c914a87c6611c10748aeb04b58e8f";
-  const freelancer = "0xc8e8089B28170CC447E89e9DaB898Bf0Cd6f53d8";
-  const amount = 100;
+  const r1 = await token.approve(ROUTER_ADDRESS, amount, {
+    gasLimit: 600000,
+  });
+  const r2 = await router.transfer(FREELANCER_ADDRESS, amount, {
+    gasLimit: 600000,
+  });
 
-  await c.pay(token, freelancer, amount);
+  console.log(r1);
+  console.log(r2);
 }
 
 main().catch((error) => {

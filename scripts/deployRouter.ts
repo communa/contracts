@@ -5,6 +5,8 @@
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
 
+const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS as string;
+
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
   // line interface.
@@ -15,9 +17,7 @@ async function main() {
 
   // We get the contract to deploy
   const CommunaRouter = await ethers.getContractFactory("CommunaRouter");
-
-  const address = "0xc8e8089B28170CC447E89e9DaB898Bf0Cd6f53d8";
-  const router = await CommunaRouter.deploy(address);
+  const router = await CommunaRouter.deploy(TOKEN_ADDRESS);
 
   await router.deployed();
 
