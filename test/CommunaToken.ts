@@ -1,89 +1,110 @@
-import { ethers } from "hardhat";
 import { expect } from "chai";
-import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+import { ethers } from "hardhat";
 import snapshotGasCost from "@uniswap/snapshot-gas-cost";
 
-// https://github.com/amanusk/hardhat-template
+describe("CommunaToken", function () {
+  it("should delpoy with zero supply", async () => {
+    // Arrange
+    const Token = await ethers.getContractFactory("CommunaToken");
+    const token = await Token.deploy();
 
-describe("Token", () => {
-  async function deployContracts() {
-    const [deployer, sender, receiver] = await ethers.getSigners();
-    const tokenFactory = await ethers.getContractFactory("CommunaToken");
-    const tokenContract = await tokenFactory.deploy();
+    // Act
+    const totalSupply = ethers.utils.parseEther("0");
+    await token.deployed();
 
-    expect(await tokenContract.totalSupply()).to.eq(0);
-
-    return { deployer, sender, receiver, tokenContract };
-  }
-
-  describe("Mint", async () => {
-    it("Should mint some tokens", async () => {
-      const { deployer, sender, receiver, tokenContract } = await loadFixture(
-        deployContracts
-      );
-
-      const toMint = ethers.utils.parseEther("1");
-
-      await tokenContract.mint(sender.address, toMint);
-      expect(await tokenContract.totalSupply()).to.eq(toMint);
-    });
+    // Assert
+    expect(await token.totalSupply()).to.eq(totalSupply);
   });
 
-  describe("Transfer", async () => {
-    it("Should transfer tokens between users", async () => {
-      const { deployer, sender, receiver, tokenContract } = await loadFixture(
-        deployContracts
-      );
+  it("should mint token", async () => {
+    // Arrange
+    const [addr1] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("CommunaToken");
+    const token = await Token.deploy();
+    await token.deployed();
 
-      const deployerInstance = tokenContract.connect(deployer);
-      const toMint = ethers.utils.parseEther("1");
+    // Act
+    const toMint = ethers.utils.parseEther("1");
+    await token.mint(addr1.address, toMint);
 
-      await deployerInstance.mint(sender.address, toMint);
-      expect(await deployerInstance.balanceOf(sender.address)).to.eq(toMint);
-
-      const senderInstance = tokenContract.connect(sender);
-      const toSend = ethers.utils.parseEther("0.4");
-      await senderInstance.transfer(receiver.address, toSend);
-
-      expect(await senderInstance.balanceOf(receiver.address)).to.eq(toSend);
-    });
-
-    it("Should fail to transfer with low balance", async () => {
-      const { deployer, sender, receiver, tokenContract } = await loadFixture(
-        deployContracts
-      );
-
-      const deployerInstance = tokenContract.connect(deployer);
-      const toMint = ethers.utils.parseEther("1");
-
-      await deployerInstance.mint(sender.address, toMint);
-      expect(await deployerInstance.balanceOf(sender.address)).to.eq(toMint);
-
-      const senderInstance = tokenContract.connect(sender);
-      const toSend = ethers.utils.parseEther("1.1");
-
-      // Notice await is on the expect
-      await expect(
-        senderInstance.transfer(receiver.address, toSend)
-      ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
-    });
+    // Assert
+    expect(await token.totalSupply()).to.eq(toMint);
   });
-  describe("gas tests", () => {
-    it("test gas cost of transfer", async () => {
-      const { deployer, sender, receiver, tokenContract } = await loadFixture(
-        deployContracts
-      );
 
-      const deployerInstance = tokenContract.connect(deployer);
-      const toMint = ethers.utils.parseEther("1");
+  it("should transfer tokens between accounts", async () => {
+    // Arrange
+    const [addr1, addr2] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("CommunaToken");
+    const token = await Token.deploy();
+    await token.deployed();
 
-      await deployerInstance.mint(sender.address, toMint);
-      expect(await deployerInstance.balanceOf(sender.address)).to.eq(toMint);
+    const toMint = ethers.utils.parseEther("1");
+    const toSend = ethers.utils.parseEther("0.4");
+    const toReceive = ethers.utils.parseEther("0.6");
 
-      const senderInstance = tokenContract.connect(sender);
-      const toSend = ethers.utils.parseEther("0.4");
-
-      await snapshotGasCost(senderInstance.transfer(receiver.address, toSend));
+    // Act
+    await token.mint(addr1.address, toMint);
+    await token.transfer(addr2.address, toSend, {
+      from: addr1.address,
     });
+
+    // Assert
+    expect(await token.balanceOf(addr1.address)).to.eq(toReceive);
+    expect(await token.balanceOf(addr2.address)).to.eq(toSend);
+  });
+
+  it("should fail to transfer with low balance", async () => {
+    // Arrange
+    const [addr1, addr2] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("CommunaToken");
+    const token = await Token.deploy();
+    await token.deployed();
+
+    // Act
+    const toMint = ethers.utils.parseEther("1");
+    const toSend = ethers.utils.parseEther("1.1");
+
+    await token.mint(addr1.address, toMint);
+
+    // Assert
+    expect(await token.balanceOf(addr1.address)).to.eq(toMint);
+
+    await expect(token.transfer(addr2.address, toSend)).to.be.revertedWith(
+      "ERC20: transfer amount exceeds balance"
+    );
+  });
+
+  it("should airdrop", async () => {
+    // Arrange
+    const [addr1] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("CommunaToken");
+    const token = await Token.deploy();
+    await token.deployed();
+
+    // Act
+    const toReceive = ethers.utils.parseEther("10");
+
+    await token.airdrop();
+
+    // Assert
+    expect(await token.balanceOf(addr1.address)).to.eq(toReceive);
+  });
+
+  it("test gas cost of transfer", async () => {
+    // Arrange
+    const [addr1, addr2] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("CommunaToken");
+    const token = await Token.deploy();
+    await token.deployed();
+
+    // Act
+    const toMint = ethers.utils.parseEther("1");
+    const toSend = ethers.utils.parseEther("0.4");
+
+    await token.mint(addr1.address, toMint);
+
+    expect(await token.balanceOf(addr1.address)).to.eq(toMint);
+
+    await snapshotGasCost(token.transfer(addr2.address, toSend));
   });
 });

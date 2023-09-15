@@ -19,4 +19,10 @@ contract CommunaToken is ERC20, AccessControl {
         require(hasRole(MINTER_ROLE, msg.sender), "Only minter can mint");
         _mint(to, amount);
     }
+
+    function airdrop() external {
+        uint256 amount = 10 * 10 ** 18;
+
+        _mint(msg.sender, amount);
+    }
 }

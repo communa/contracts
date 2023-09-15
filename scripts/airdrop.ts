@@ -5,7 +5,6 @@ const contract = require("../artifacts/contracts/CommunaToken.sol/CommunaToken.j
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
 const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS as string;
-const CLIENT_ADDRESS = process.env.CLIENT_ADDRESS as string;
 
 async function main() {
   const provider = new ethers.providers.AlchemyProvider(
@@ -15,11 +14,9 @@ async function main() {
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
   const token = new ethers.Contract(TOKEN_ADDRESS, contract.abi, signer);
 
-  const amount = ethers.utils.parseEther("1000");
+  const airdrop = await token.airdrop();
 
-  const mint = await token.mint(CLIENT_ADDRESS, amount);
-
-  console.log(mint);
+  console.log(airdrop);
 }
 
 main().catch((error) => {

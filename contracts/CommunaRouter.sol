@@ -12,9 +12,9 @@ contract CommunaRouter {
         wallet = _wallet;
     }
 
-    function transfer(
-        address _token,
+    function pay(
         address _to,
+        address _token,
         uint256 _amount
     ) external payable {
         IERC20(_token).transferFrom(msg.sender, address(this), _amount);

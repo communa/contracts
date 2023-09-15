@@ -28,15 +28,20 @@ async function main() {
   );
   const amount = ethers.utils.parseEther("1");
 
-  const r1 = await token.approve(ROUTER_ADDRESS, amount, {
+  const approve = await token.approve(ROUTER_ADDRESS, amount, {
     gasLimit: 600000,
   });
-  const r2 = await router.transfer(FREELANCER_ADDRESS, amount, {
-    gasLimit: 600000,
-  });
+  const transfer = await router.transfer(
+    TOKEN_ADDRESS,
+    FREELANCER_ADDRESS,
+    amount,
+    {
+      gasLimit: 600000,
+    }
+  );
 
-  console.log(r1);
-  console.log(r2);
+  console.log(approve);
+  console.log(transfer);
 }
 
 main().catch((error) => {
