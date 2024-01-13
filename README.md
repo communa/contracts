@@ -3,6 +3,8 @@ Communa is a web3 platform for freelancing that connects businesses with talente
 - [https://communa.network/](https://communa.network/)
 - [https://github.com/communa](https://github.com/communa)
 
+Token address: https://polygonscan.com/address/0x11cb646503f17718B77A8CD5260061fadE305763#code
+
 ### Development
 Clonning and running on a local machine
 ```bash
@@ -19,10 +21,11 @@ npx hardhat test test/CommunaToken.ts --grep 'should transfer ownership'
 ```
 
 # Deployment
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Goerlu.
+To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Goerli or Polygon.
 
 In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
 
+Goerli
 ```shell
 npx hardhat run --network goerli scripts/deployToken.ts
 npx hardhat run --network goerli scripts/deployRouter.ts
@@ -31,11 +34,27 @@ npx hardhat run --network goerli scripts/mint.ts
 npx hardhat run --network goerli scripts/airdrop.ts
 ```
 
+Polygon
+```shell
+npx hardhat run --network polygon scripts/deployToken.ts
+npx hardhat run --network polygon scripts/deployRouter.ts
+npx hardhat run --network polygon scripts/pay.ts
+npx hardhat run --network polygon scripts/mint.ts
+npx hardhat run --network polygon scripts/airdrop.ts
+```
+
 Then, copy the deployment address and paste it in to replace `ROUTER_ADDRESS` and `TOKEN_ADDRESS` in this command:
 
+Goerli
 ```shell
 npx hardhat verify --network goerli TOKEN_ADDRESS
 npx hardhat verify --network goerli ROUTER_ADDRESS TOKEN_ADDRESS
+```
+
+Polygon
+```shell
+npx hardhat verify --network polygon TOKEN_ADDRESS
+npx hardhat verify --network polygon ROUTER_ADDRESS TOKEN_ADDRESS
 ```
 
 # Commands

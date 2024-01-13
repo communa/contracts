@@ -3,7 +3,7 @@ import {ethers} from "hardhat";
 const contractRouterAbi = require("../../artifacts/contracts/CommunaRouter.sol/CommunaRouter.json");
 const contractTokenAbi = require("../../artifacts/contracts/CommunaToken.sol/CommunaToken.json");
 
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY as string;
+const GOERLI_API_KEY = process.env.GOERLI_API_KEY as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
 
 const ROUTER_ADDRESS = process.env.ROUTER_ADDRESS as string;
@@ -13,7 +13,7 @@ const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS as string;
 async function main() {
   const provider = new ethers.providers.AlchemyProvider(
     "goerli",
-    ALCHEMY_API_KEY
+    GOERLI_API_KEY
   );
   const signer = new ethers.Wallet(PRIVATE_KEY, provider);
   const token = new ethers.Contract(
