@@ -1,10 +1,10 @@
-import { ethers } from "hardhat";
+import {ethers} from "hardhat";
 
-const COMMUNA_ADDRESS = process.env.COMMUNA_ADDRESS as string;
+const MULTISIG_ADDRESS = process.env.MULTISIG_ADDRESS as string;
 
 async function main() {
   const CommunaRouter = await ethers.getContractFactory("CommunaRouter");
-  const router = await CommunaRouter.deploy(COMMUNA_ADDRESS);
+  const router = await CommunaRouter.deploy(MULTISIG_ADDRESS);
 
   await router.deployed();
 

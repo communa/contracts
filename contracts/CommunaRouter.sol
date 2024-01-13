@@ -3,8 +3,12 @@ pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CommunaRouter {
+/**
+ * @notice Communa Network payment router
+ */
+contract CommunaRouter is Ownable {
     address private wallet;
     uint256 private percentage = 5;
 

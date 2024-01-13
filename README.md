@@ -11,6 +11,13 @@ yarn install
 yarn dev
 ```
 
+### Testing
+Running tests
+```bash
+npx hardhat test
+npx hardhat test test/CommunaToken.ts --grep 'should transfer ownership'
+```
+
 # Deployment
 To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Goerlu.
 

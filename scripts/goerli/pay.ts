@@ -1,7 +1,7 @@
-import { ethers } from "hardhat";
+import {ethers} from "hardhat";
 
-const contractRouterAbi = require("../artifacts/contracts/CommunaRouter.sol/CommunaRouter.json");
-const contractTokenAbi = require("../artifacts/contracts/CommunaToken.sol/CommunaToken.json");
+const contractRouterAbi = require("../../artifacts/contracts/CommunaRouter.sol/CommunaRouter.json");
+const contractTokenAbi = require("../../artifacts/contracts/CommunaToken.sol/CommunaToken.json");
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;

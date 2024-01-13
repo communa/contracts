@@ -2,27 +2,15 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @notice A mintable ERC20
+ * @notice Communa Network ERC20 Token
  */
-contract CommunaToken is ERC20, AccessControl {
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+contract CommunaToken is ERC20, Ownable {
+    constructor() ERC20("Communa Network", "COMM") {}
 
-    constructor() ERC20("Communa Network", "COMM") {
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(MINTER_ROLE, msg.sender);
-    }
-
-    function mint(address to, uint256 amount) external {
-        require(hasRole(MINTER_ROLE, msg.sender), "Only minter can mint");
+    function mint(address to, uint256 amount) external onlyOwner {
         _mint(to, amount);
-    }
-
-    function airdrop() external {
-        uint256 amount = 10 * 10 ** 18;
-
-        _mint(msg.sender, amount);
     }
 }
